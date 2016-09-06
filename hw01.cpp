@@ -6,9 +6,8 @@
  *
  * Tested under g++ 6.2.0, POSIX thread model, C++11, MinGW64.
  * Tested under clang++ 3.5.0, POSIX thread model, C++11.
- * Tested under valgrind 3.1.0.
+ * Tested under valgrind 3.1.0 on Debian.
  */
-
 
 #include <stdlib.h>
 #include <iomanip>
@@ -254,7 +253,6 @@ public:
 private:
     _grid_t grid;
 };
-
 
 /**
  * Main entry point.
