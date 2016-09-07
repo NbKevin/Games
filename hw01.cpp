@@ -7,6 +7,8 @@
  * Tested under g++ 6.2.0, POSIX thread model, C++11, MinGW64.
  * Tested under clang++ 3.5.0, POSIX thread model, C++11.
  * Tested under valgrind 3.1.0 on Debian.
+ *
+ * Pass in -DNDEBUG to disable debug configuration.
  */
 
 #include <stdlib.h>
@@ -261,7 +263,8 @@ private:
 int main(int argc, char *argv[]) {
     try {
 #if defined(__HW1__DEBUG)
-        cout << "HW1_DEBUG: Running using DEBUG configuration" << endl;
+        cout << "HW1_DEBUG: Running using DEBUG configuration, "
+                "pass in -DNDEBUG to disable it" << endl;
 #endif
 
         const _signed generation = argc >= 2 ? stoll(argv[1]) : DEFAULT_GENERATION;
@@ -270,7 +273,8 @@ int main(int argc, char *argv[]) {
         const _signed columns = argc >= 5 ? stoll(argv[4]) : DEFAULT_COLUMNS;
 
         if (generation < 0 || rows < 0 || columns < 0)
-            throw runtime_error("[generation] [rows] and [columns] must all be positive");
+            throw runtime_error("[generation] [rows] and [columns] "
+                                        "must all be positive integrals");
 
 #if defined(__HW1__DEBUG)
         cout << "HW1_DEBUG: Read " << argc - 1 << " argument(s)" << endl;
@@ -289,7 +293,11 @@ int main(int argc, char *argv[]) {
             cout << "Generation " << gen_index << ": " << endl;
             grid.display();
         }
-    } catch (const exception &e) {
+    } catch (const std::invalid_argument &e) {
+        cerr << "Program failed: [generation], [rows] "
+                "and [columns] must all be positive integrals" << endl;
+        return -1;
+    } catch (const std::exception &e) {
         cerr << "Program failed: " << e.what() << endl;
         return -1;
     }
